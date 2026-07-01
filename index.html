@@ -10,54 +10,54 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { background: #f0f4f8; color: #333; }
-    .navbar { background: linear-gradient(135deg, #0d6efd, #0a58ca); color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    .navbar h1 { font-size: 22px; }
-    .navbar.left { display: flex; gap: 10px; align-items: center; }
-    .btn { padding: 8px 16px; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-    .btn-light { background: rgba(255,255,255,0.2); color: white; }
-    .btn-light:hover { background: rgba(255,255,255,0.3); }
-    .container { max-width: 1400px; margin: 20px auto; padding: 0 20px; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 25px; }
-    .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: relative; overflow: hidden; }
-    .stat-card.icon { position: absolute; left: 20px; top: 20px; font-size: 40px; opacity: 0.15; }
-    .stat-card.label { font-size: 14px; color: #666; margin-bottom: 8px; }
-    .stat-card.value { font-size: 28px; font-weight: 700; color: #0d6efd; }
-    .stat-card.value.red { color: #dc3545; }
-    .stat-card.value.green { color: #198754; }
-    .stat-card.value.orange { color: #fd7e14; }
-    .upload-zone { background: white; border: 3px dashed #0d6efd; border-radius: 12px; padding: 40px; text-align: center; margin-bottom: 25px; cursor: pointer; transition: 0.3s; }
-    .upload-zone.drag { background: #e8f5e9; border-color: #198754; }
-    .upload-zone i { font-size: 50px; color: #0d6efd; margin-bottom: 15px; }
-    .upload-zone h2 { font-size: 20px; margin-bottom: 10px; }
-    .upload-zone kbd { background: #333; color: white; padding: 3px 8px; border-radius: 4px; font-family: monospace; }
-    .manual-entry { background: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    .manual-entry h3 { margin-bottom: 15px; font-size: 18px; }
-    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; color: #555; }
-    .form-group input,.form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; }
-    .search-bar { background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    .search-bar input { flex: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
-    .btn-primary { background: #0d6efd; color: white; }
-    .btn-primary:hover { background: #0a58ca; }
-    .btn-success { background: #198754; color: white; }
-    .btn-danger { background: #dc3545; color: white; }
-    .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px; }
-    .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    .card h3 { margin-bottom: 15px; font-size: 18px; color: #333; }
-    .table-wrap { overflow-x: auto; }
+     .navbar { background: linear-gradient(135deg, #0d6efd, #0a58ca); color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+     .navbar h1 { font-size: 22px; }
+     .navbar.left { display: flex; gap: 10px; align-items: center; }
+     .btn { padding: 8px 16px; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+     .btn-light { background: rgba(255,255,255,0.2); color: white; }
+     .btn-light:hover { background: rgba(255,255,255,0.3); }
+     .container { max-width: 1400px; margin: 20px auto; padding: 0 20px; }
+     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 25px; }
+     .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: relative; overflow: hidden; }
+     .stat-card.icon { position: absolute; left: 20px; top: 20px; font-size: 40px; opacity: 0.15; }
+     .stat-card.label { font-size: 14px; color: #666; margin-bottom: 8px; }
+     .stat-card.value { font-size: 28px; font-weight: 700; color: #0d6efd; }
+     .stat-card.value.red { color: #dc3545; }
+     .stat-card.value.green { color: #198754; }
+     .stat-card.value.orange { color: #fd7e14; }
+     .upload-zone { background: white; border: 3px dashed #0d6efd; border-radius: 12px; padding: 30px; text-align: center; margin-bottom: 25px; cursor: pointer; transition: 0.3s; }
+     .upload-zone.drag { background: #e8f5e9; border-color: #198754; }
+     .upload-zone i { font-size: 50px; color: #0d6efd; margin-bottom: 15px; }
+     .upload-zone h2 { font-size: 20px; margin-bottom: 10px; }
+     .upload-zone kbd { background: #333; color: white; padding: 3px 8px; border-radius: 4px; font-family: monospace; }
+     .manual-entry { background: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+     .manual-entry h3 { margin-bottom: 15px; font-size: 18px; }
+     .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+     .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; color: #555; }
+     .form-group input,.form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; }
+     .search-bar { background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+     .search-bar input { flex: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
+     .btn-primary { background: #0d6efd; color: white; }
+     .btn-primary:hover { background: #0a58ca; }
+     .btn-success { background: #198754; color: white; }
+     .btn-danger { background: #dc3545; color: white; }
+     .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px; }
+     .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+     .card h3 { margin-bottom: 15px; font-size: 18px; color: #333; }
+     .table-wrap { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
         th { background: #f8f9fa; padding: 12px; text-align: right; font-weight: 600; font-size: 14px; color: #555; border-bottom: 2px solid #dee2e6; }
         td { padding: 12px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
         tr:hover { background: #f8fbff; }
-    .badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-    .badge-red { background: #f8d7da; color: #721c24; }
-    .badge-green { background: #d4edda; color: #155724; }
-    .actions { display: flex; gap: 5px; }
-    .btn-sm { padding: 6px 12px; font-size: 13px; }
-    .btn-icon { width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
-    .toast { position: fixed; bottom: 20px; left: 20px; background: #333; color: white; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: none; z-index: 9999; }
-    .toast.success { background: #198754; }
-    .toast.error { background: #dc3545; }
+     .badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+     .badge-red { background: #f8d7da; color: #721c24; }
+     .badge-green { background: #d4edda; color: #155724; }
+     .actions { display: flex; gap: 5px; }
+     .btn-sm { padding: 6px 12px; font-size: 13px; }
+     .btn-icon { width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
+     .toast { position: fixed; bottom: 20px; left: 20px; background: #333; color: white; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: none; z-index: 9999; }
+     .toast.success { background: #198754; }
+     .toast.error { background: #dc3545; }
         #loadingOverlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10000; align-items: center; justify-content: center; }
         #loadingOverlay.box { background: white; padding: 30px; border-radius: 12px; text-align: center; }
         #loadingOverlay.spinner { border: 4px solid #f3f3f3; border-top: 4px solid #0d6efd; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
@@ -65,14 +65,14 @@
         #imageInput { display: none; }
 
         /* نافذة التأكيد */
-       .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10001; align-items: center; justify-content: center; }
-       .modal-content { background: white; border-radius: 12px; padding: 25px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; }
-       .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-       .modal-header h3 { font-size: 20px; }
-       .close-btn { font-size: 28px; cursor: pointer; color: #999; }
-       .close-btn:hover { color: #333; }
-       .image-preview { width: 100%; max-height: 300px; object-fit: contain; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; }
-       .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+     .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10001; align-items: center; justify-content: center; }
+     .modal-content { background: white; border-radius: 12px; padding: 25px; max-width: 700px; width: 90%; max-height: 90vh; overflow-y: auto; }
+     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+     .modal-header h3 { font-size: 20px; }
+     .close-btn { font-size: 28px; cursor: pointer; color: #999; }
+     .close-btn:hover { color: #333; }
+     .image-preview { width: 100%; max-height: 300px; object-fit: contain; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; }
+     .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
 
         @media (max-width: 768px) {.grid-2 { grid-template-columns: 1fr; }.stats-grid { grid-template-columns: 1fr 1fr; } }
     </style>
@@ -110,39 +110,41 @@
             </div>
         </div>
 
+        <!-- منطقة لصق الصورة + حقل رقم العميل -->
         <div class="upload-zone" id="dropZone" onclick="document.getElementById('imageInput').click()">
             <input type="file" id="imageInput" accept="image/*">
             <i class="fa-solid fa-cloud-arrow-up"></i>
             <h2>الصق صورة الفاتورة أو السند هنا</h2>
-            <p>اضغط <kbd>PrtSc</kbd> من ODAX ثم <kbd>Ctrl + V</kbd> في أي مكان بالصفحة</p>
+            <p>اضغط <kbd>PrtSc</kbd> من ODAX ثم <kbd>Ctrl + V</kbd> في أي مكان</p>
+
+            <div style="margin-top:20px; max-width:300px; margin-left:auto; margin-right:auto;">
+                <label style="display:block; margin-bottom:8px; font-weight:600;">رقم العميل (اختياري - لو OCR فشل)</label>
+                <input type="number" id="preCustomerId" placeholder="اكتب رقم العميل قبل اللصق" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; text-align:center; font-size:16px;">
+            </div>
         </div>
 
+        <!-- إضافة عميل جديد -->
         <div class="manual-entry">
-            <h3><i class="fa-solid fa-keyboard"></i> إضافة مبلغ يدوي - فاتورة أو سند قبض</h3>
+            <h3><i class="fa-solid fa-user-plus"></i> إضافة عميل جديد</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label>رقم العميل</label>
-                    <input type="number" id="manualCustomerId" placeholder="مثال: 6">
+                    <label>رقم العميل *</label>
+                    <input type="number" id="newCustomerId" placeholder="مثال: 6">
                 </div>
                 <div class="form-group">
-                    <label>نوع الحركة</label>
-                    <select id="manualType">
-                        <option value="taqyid">فاتورة آجلة - تقييد دين</option>
-                        <option value="sadad">سند قبض - سداد</option>
-                    </select>
+                    <label>اسم العميل *</label>
+                    <input type="text" id="newCustomerName" placeholder="مثال: عبدالله المروسي">
                 </div>
                 <div class="form-group">
-                    <label>المبلغ</label>
-                    <input type="number" id="manualAmount" placeholder="مثال: 290">
+                    <label>رقم الهاتف *</label>
+                    <input type="tel" id="newCustomerPhone" placeholder="770123456">
                 </div>
                 <div class="form-group">
-                    <label>طريقة الإرسال</label>
-                    <select id="manualSendType">
-                        <option value="sms">SMS</option>
-                        <option value="whatsapp">واتساب</option>
-                    </select>
+                    <label>الرصيد الافتتاحي</label>
+                    <input type="number" id="newCustomerDebt" placeholder="0" value="0">
                 </div>
-            <button class="btn btn-primary" onclick="sendManual()"><i class="fa-solid fa-paper-plane"></i> إرسال المطالبة وتحديث الرصيد</button>
+            </div>
+            <button class="btn btn-success" onclick="addNewCustomer()"><i class="fa-solid fa-save"></i> حفظ العميل في Firebase</button>
         </div>
 
         <div class="search-bar">
@@ -281,7 +283,7 @@ async function processImage(blob) {
         let movementType = 'taqyid';
         let amount = '0';
         let balance = '0';
-        let customerId = 0;
+        let customerId = parseInt(document.getElementById('preCustomerId').value) || 0;
         let customerName = '';
 
         // 1. سند قبض
@@ -289,8 +291,10 @@ async function processImage(blob) {
             movementType = 'sadad';
             const match = text.match(/المبلغ\s*([\d,]+\.?\d*)/);
             amount = match? match[1].replace(/,/g, '') : '0';
-            const idMatch = text.match(/رقم تحليلي\s*(\d+)/);
-            customerId = idMatch? parseInt(idMatch[1]) : 0;
+            if (!customerId) {
+                const idMatch = text.match(/رقم تحليلي\s*(\d+)/);
+                customerId = idMatch? parseInt(idMatch[1]) : 0;
+            }
             const nameMatch = text.match(/اسم الحساب\s*:\s*(.+)/);
             customerName = nameMatch? nameMatch[1].trim() : '';
 
@@ -301,8 +305,10 @@ async function processImage(blob) {
             const balanceMatch = text.match(/الرصيد الحالي\s*:\s*([\d,]+\.?\d*)/);
             amount = amountMatch? amountMatch[1].replace(/,/g, '') : '0';
             balance = balanceMatch? balanceMatch[1].replace(/,/g, '') : '0';
-            const idMatch = text.match(/المطلوب من الأخ\s*\/\s*.*?(\d+)/) || text.match(/المطلوب من الأخ.*?(\d+)/);
-            customerId = idMatch? parseInt(idMatch[1]) : 0;
+            if (!customerId) {
+                const idMatch = text.match(/المطلوب من الأخ\s*\/\s*.*?(\d+)/) || text.match(/المطلوب من الأخ.*?(\d+)/);
+                customerId = idMatch? parseInt(idMatch[1]) : 0;
+            }
             const nameMatch = text.match(/المطلوب من الأخ\s*\/\s*(.+?)\s+\d+/);
             customerName = nameMatch? nameMatch[1].trim() : '';
 
@@ -311,15 +317,15 @@ async function processImage(blob) {
             movementType = 'taqyid';
             const amountMatch = text.match(/صافي الفاتورة\s*([\d,]+\.?\d*)/);
             amount = amountMatch? amountMatch[1].replace(/,/g, '') : '0';
-            const idMatch = text.match(/العميل\s*:?\s*.+?\s+(\d+)/);
-            customerId = idMatch? parseInt(idMatch[1]) : 0;
+            if (!customerId) {
+                const idMatch = text.match(/العميل\s*:?\s*.+?\s+(\d+)/);
+                customerId = idMatch? parseInt(idMatch[1]) : 0;
+            }
             const nameMatch = text.match(/العميل\s*:?\s*(.+?)\s+\d+/);
             customerName = nameMatch? nameMatch[1].trim() : '';
         }
 
         hideLoading();
-
-        // عرض نافذة التأكيد
         showConfirmModal(blob, customerId, customerName, movementType, amount, balance);
 
     } catch (err) {
@@ -329,21 +335,18 @@ async function processImage(blob) {
 }
 
 function showConfirmModal(blob, customerId, customerName, type, amount, balance) {
-    // عرض الصورة
     const reader = new FileReader();
     reader.onload = (e) => {
         document.getElementById('previewImage').src = e.target.result;
     };
     reader.readAsDataURL(blob);
 
-    // تعبئة الحقول
     document.getElementById('confirmCustomerId').value = customerId || '';
     document.getElementById('confirmCustomerName').value = customerName || '';
     document.getElementById('confirmType').value = type;
     document.getElementById('confirmAmount').value = amount || '';
     document.getElementById('confirmBalance').value = balance || '';
 
-    // لو لقينا رقم العميل، نجيب اسمه من Firebase
     if (customerId) {
         const customer = allCustomers.find(c => c.id === customerId);
         if (customer) {
@@ -351,7 +354,6 @@ function showConfirmModal(blob, customerId, customerName, type, amount, balance)
         }
     }
 
-    // لما تغير رقم العميل، نحدث الاسم تلقائي
     document.getElementById('confirmCustomerId').oninput = function() {
         const id = parseInt(this.value);
         const customer = allCustomers.find(c => c.id === id);
@@ -363,6 +365,7 @@ function showConfirmModal(blob, customerId, customerName, type, amount, balance)
 
 function closeModal() {
     document.getElementById('confirmModal').style.display = 'none';
+    document.getElementById('preCustomerId').value = '';
     currentImageBlob = null;
 }
 
@@ -380,33 +383,28 @@ async function confirmAndSend() {
 
     const customer = allCustomers.find(c => c.id === customerId);
     if (!customer) {
-        showToast(`العميل ${customerId} غير موجود في Firebase`, 'error');
+        showToast(`العميل ${customerId} غير موجود في Firebase. أضفه أولاً من قسم "إضافة عميل جديد"`, 'error');
         return;
     }
 
     showLoading('تحديث الرصيد وإرسال الرسالة...');
 
     try {
-        // 1. حساب الرصيد الجديد
         let newBalance = customer.totalDebt || 0;
         if (type === 'taqyid') {
-            newBalance += amount; // فاتورة آجلة = زيادة الدين
+            newBalance += amount;
         } else if (type === 'sadad') {
-            newBalance -= amount; // سند قبض = نقص الدين
+            newBalance -= amount;
         }
-
-        // لو الرصيد جا من الصورة، نستخدمه
         if (balanceFromImage > 0) {
             newBalance = balanceFromImage;
         }
 
-        // 2. تحديث Firebase
         await fetch(`${FIREBASE_URL}/customers/${customerId}.json`, {
             method: 'PATCH',
             body: JSON.stringify({ totalDebt: newBalance })
         });
 
-        // 3. إرسال الرسالة
         const msg = getMessageText(type, sendType, customer.name, amount, newBalance);
 
         if (sendType === 'sms') {
@@ -418,7 +416,7 @@ async function confirmAndSend() {
 
         showToast(`تم إرسال وتحديث رصيد ${customer.name} إلى ${newBalance.toLocaleString('ar-YE')} ر.ي ✅`, 'success');
         closeModal();
-        syncData(); // تحديث الجدول
+        syncData();
 
     } catch (err) {
         showToast(`خطأ: ${err.message}`, 'error');
@@ -427,33 +425,53 @@ async function confirmAndSend() {
     }
 }
 
-function sendManual() {
-    const customerId = parseInt(document.getElementById('manualCustomerId').value);
-    const type = document.getElementById('manualType').value;
-    const amount = parseFloat(document.getElementById('manualAmount').value);
-    const sendType = document.getElementById('manualSendType').value;
+// إضافة عميل جديد
+async function addNewCustomer() {
+    const id = parseInt(document.getElementById('newCustomerId').value);
+    const name = document.getElementById('newCustomerName').value.trim();
+    const phone = document.getElementById('newCustomerPhone').value.trim();
+    const debt = parseFloat(document.getElementById('newCustomerDebt').value) || 0;
 
-    if (!customerId ||!amount) {
-        showToast('أدخل رقم العميل والمبلغ', 'error');
+    if (!id ||!name ||!phone) {
+        showToast('أدخل رقم العميل والاسم والهاتف', 'error');
         return;
     }
 
-    const customer = allCustomers.find(c => c.id === customerId);
-    if (!customer) {
-        showToast(`العميل ${customerId} غير موجود`, 'error');
+    if (allCustomers.find(c => c.id === id)) {
+        showToast(`العميل ${id} موجود مسبقاً`, 'error');
         return;
     }
 
-    // نستخدم نفس دالة التأكيد
-    document.getElementById('confirmCustomerId').value = customerId;
-    document.getElementById('confirmCustomerName').value = customer.name;
-    document.getElementById('confirmType').value = type;
-    document.getElementById('confirmAmount').value = amount;
-    document.getElementById('confirmBalance').value = '';
-    document.getElementById('confirmSendType').value = sendType;
-    document.getElementById('previewImage').style.display = 'none';
+    showLoading('حفظ العميل الجديد...');
 
-    document.getElementById('confirmModal').style.display = 'flex';
+    try {
+        const newCustomer = {
+            id: id,
+            name: name,
+            phone: phone,
+            totalDebt: debt
+        };
+
+        await fetch(`${FIREBASE_URL}/customers/${id}.json`, {
+            method: 'PUT',
+            body: JSON.stringify(newCustomer)
+        });
+
+        showToast(`تم إضافة العميل ${name} بنجاح ✅`, 'success');
+
+        // تفريغ الحقول
+        document.getElementById('newCustomerId').value = '';
+        document.getElementById('newCustomerName').value = '';
+        document.getElementById('newCustomerPhone').value = '';
+        document.getElementById('newCustomerDebt').value = '0';
+
+        syncData();
+
+    } catch (err) {
+        showToast(`خطأ: ${err.message}`, 'error');
+    } finally {
+        hideLoading();
+    }
 }
 
 function getMessageText(type, channel, name, amount, totalDebt) {
@@ -470,13 +488,15 @@ async function syncData() {
     showToast('جاري المزامنة...', '');
     try {
         const res = await fetch(`${FIREBASE_URL}/customers.json`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        allCustomers = Object.values(data || {});
+        allCustomers = data? Object.values(data) : [];
         updateStats();
         updateTable();
         showToast('تم التحديث بنجاح ✅', 'success');
     } catch (err) {
-        showToast('فشل المزامنة', 'error');
+        console.error('Sync Error:', err);
+        showToast(`فشل المزامنة: ${err.message}`, 'error');
     }
 }
 
