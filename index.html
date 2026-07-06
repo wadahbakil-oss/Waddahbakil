@@ -2,18 +2,17 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>صيدلية العابد - نظام الإدارة</title>
     <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; margin: 0; padding: 20px; }
-        .navbar { background: #0d6efd; color: white; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .card { background: white; padding: 20px; border-radius: 12px; margin-top: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .btn { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; padding: 20px; }
+        .navbar { background: #0d6efd; color: white; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; }
+        .card { background: white; padding: 20px; border-radius: 12px; margin-top: 20px; }
+        .btn { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; background: #ffc107; }
         .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 25px; border-radius: 12px; width: 400px; }
-        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
@@ -21,15 +20,14 @@
 <div class="navbar">
     <h2>صيدلية العابد</h2>
     <div>
-        <button class="btn" onclick="exportData()">تصدير JSON</button>
         <button class="btn" onclick="uploadToCloud()">رفع للسحابة</button>
         <button class="btn" onclick="downloadFromCloud()">تنزيل من السحابة</button>
     </div>
 </div>
 
 <div class="card">
-    <input type="file" id="imageInput" accept="image/*">
-    <p>أو الصق الصورة هنا مباشرة باستخدام Ctrl+V</p>
+    <input type="file" id="fileInput" accept="image/*, application/pdf" onchange="handleFile(event)">
+    <p>يدعم الصور وملفات PDF</p>
 </div>
 
 <div class="modal" id="confirmModal">
@@ -38,69 +36,78 @@
         <input type="number" id="confirmCustomerId" placeholder="رقم العميل">
         <input type="number" id="confirmAmount" placeholder="المبلغ">
         <select id="confirmType">
-            <option value="taqyid">فاتورة (تقييد)</option>
-            <option value="sadad">سند قبض (سداد)</option>
+            <option value="taqyid">فاتورة (مدين)</option>
+            <option value="sadad">سند قبض (دائن)</option>
         </select>
         <button class="btn" style="background:green; color:white; width:100%" onclick="confirmAndSave()">حفظ وتحديث</button>
     </div>
 </div>
 
 <script>
-    const FIREBASE_URL = 'https://alabeed-pharmacy-default-rtdb.firebaseio.com';
+    const DB_URL = 'https://alabeed-pharmacy-default-rtdb.firebaseio.com/customers.json';
     let allCustomers = JSON.parse(localStorage.getItem('pharmacy_data')) || [];
 
-    // استخراج النصوص من الصورة
-    async function processImage(blob) {
-        const { data: { text } } = await Tesseract.recognize(blob, 'ara');
-        const cleanNum = (str) => parseFloat(str.replace(/[^0-9.]/g, '')) || 0;
+    // التعامل مع أنواع الملفات
+    async function handleFile(e) {
+        const file = e.target.files[0];
+        if (file.type === "application/pdf") {
+            const reader = new FileReader();
+            reader.onload = async function() {
+                const pdf = await pdfjsLib.getDocument(new Uint8Array(this.result)).promise;
+                const page = await pdf.getPage(1);
+                const viewport = page.getViewport({ scale: 2.0 });
+                const canvas = document.createElement('canvas');
+                canvas.height = viewport.height; canvas.width = viewport.width;
+                await page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport }).promise;
+                processImage(canvas.toDataURL('image/png'));
+            };
+            reader.readAsArrayBuffer(file);
+        } else {
+            const reader = new FileReader();
+            reader.onload = (e) => processImage(e.target.result);
+            reader.readAsDataURL(file);
+        }
+    }
 
-        let type = text.includes('سند قبض') ? 'sadad' : 'taqyid';
-        let amount = cleanNum(text.match(/[\d,.]+/)?.[0] || "0");
-        let id = parseInt(text.match(/\d{3,}/)?.[0] || "0");
-
-        document.getElementById('confirmCustomerId').value = id;
-        document.getElementById('confirmAmount').value = amount;
-        document.getElementById('confirmType').value = type;
+    // استخراج ذكي للبيانات من الجداول
+    async function processImage(data) {
+        const { data: { text } } = await Tesseract.recognize(data, 'ara');
+        
+        // استخراج رقم العميل: يبحث عن كلمة "رقم العميل" ويأخذ الرقم الذي يليه
+        const idMatch = text.match(/رقم العميل\s*(\d+)/i);
+        // استخراج المبلغ: يبحث عن الأرقام في سطر "سند قبض" أو "فاتورة"
+        const amtMatch = text.match(/(\d{3,}(?:\.\d+)?)/); 
+        
+        document.getElementById('confirmCustomerId').value = idMatch ? idMatch[1] : "";
+        document.getElementById('confirmAmount').value = amtMatch ? amtMatch[1] : "";
         document.getElementById('confirmModal').style.display = 'flex';
     }
 
-    // حفظ البيانات محلياً وعبر السحابة
     function confirmAndSave() {
         const id = parseInt(document.getElementById('confirmCustomerId').value);
         const amount = parseFloat(document.getElementById('confirmAmount').value);
         const type = document.getElementById('confirmType').value;
         
-        // تحديث محلي
-        let customer = allCustomers.find(c => c.id === id);
-        if(customer) {
-            customer.totalDebt = (type === 'taqyid') ? customer.totalDebt + amount : customer.totalDebt - amount;
-        } else {
-            allCustomers.push({ id, totalDebt: amount });
-        }
+        let customer = allCustomers.find(c => c.id === id) || { id, totalDebt: 0 };
+        customer.totalDebt = (type === 'taqyid') ? customer.totalDebt + amount : customer.totalDebt - amount;
         
+        if(!allCustomers.find(c => c.id === id)) allCustomers.push(customer);
         localStorage.setItem('pharmacy_data', JSON.stringify(allCustomers));
         document.getElementById('confirmModal').style.display = 'none';
-        alert("تم الحفظ بنجاح!");
+        alert("تم تحديث السجل بنجاح");
     }
 
-    // الدوال السحابية
     async function uploadToCloud() {
-        await fetch(`${FIREBASE_URL}/customers.json`, { method: 'PUT', body: JSON.stringify(allCustomers) });
+        await fetch(DB_URL, { method: 'PUT', body: JSON.stringify(allCustomers) });
         alert("تم الرفع للسحابة");
     }
 
     async function downloadFromCloud() {
-        const res = await fetch(`${FIREBASE_URL}/customers.json`);
-        allCustomers = await res.json();
+        const res = await fetch(DB_URL);
+        allCustomers = await res.json() || [];
         localStorage.setItem('pharmacy_data', JSON.stringify(allCustomers));
         alert("تم التنزيل من السحابة");
     }
-
-    // دعم اللصق المباشر
-    document.addEventListener('paste', (e) => {
-        const file = e.clipboardData.items[0].getAsFile();
-        if(file) processImage(file);
-    });
 </script>
 </body>
 </html>
