@@ -3,604 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صيدلية العابد - نظام إدارة العملاء والديون</title>
+    <title>صيدلية العابد - نظام الإدارة</title>
     <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
-    <script src='https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        body { background: #f0f4f8; color: #333; }
-     .navbar { background: linear-gradient(135deg, #0d6efd, #0a58ca); color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-     .navbar h1 { font-size: 22px; }
-     .navbar.left { display: flex; gap: 10px; align-items: center; }
-     .btn { padding: 8px 16px; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-     .btn-light { background: rgba(255,255,255,0.2); color: white; }
-     .btn-light:hover { background: rgba(255,255,255,0.3); }
-     .container { max-width: 1400px; margin: 20px auto; padding: 0 20px; }
-     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 25px; }
-     .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: relative; overflow: hidden; }
-     .stat-card.icon { position: absolute; left: 20px; top: 20px; font-size: 40px; opacity: 0.15; }
-     .stat-card.label { font-size: 14px; color: #666; margin-bottom: 8px; }
-     .stat-card.value { font-size: 28px; font-weight: 700; color: #0d6efd; }
-     .stat-card.value.red { color: #dc3545; }
-     .stat-card.value.green { color: #198754; }
-     .stat-card.value.orange { color: #fd7e14; }
-     .upload-zone { background: white; border: 3px dashed #0d6efd; border-radius: 12px; padding: 30px; text-align: center; margin-bottom: 25px; cursor: pointer; transition: 0.3s; }
-     .upload-zone.drag { background: #e8f5e9; border-color: #198754; }
-     .upload-zone i { font-size: 50px; color: #0d6efd; margin-bottom: 15px; }
-     .upload-zone h2 { font-size: 20px; margin-bottom: 10px; }
-     .upload-zone kbd { background: #333; color: white; padding: 3px 8px; border-radius: 4px; font-family: monospace; }
-     .manual-entry { background: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-     .manual-entry h3 { margin-bottom: 15px; font-size: 18px; }
-     .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
-     .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; color: #555; }
-     .form-group input,.form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; }
-     .search-bar { background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-     .search-bar input { flex: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
-     .btn-primary { background: #0d6efd; color: white; }
-     .btn-primary:hover { background: #0a58ca; }
-     .btn-success { background: #198754; color: white; }
-     .btn-danger { background: #dc3545; color: white; }
-     .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px; }
-     .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-     .card h3 { margin-bottom: 15px; font-size: 18px; color: #333; }
-     .table-wrap { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #f8f9fa; padding: 12px; text-align: right; font-weight: 600; font-size: 14px; color: #555; border-bottom: 2px solid #dee2e6; }
-        td { padding: 12px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
-        tr:hover { background: #f8fbff; }
-     .badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-     .badge-red { background: #f8d7da; color: #721c24; }
-     .badge-green { background: #d4edda; color: #155724; }
-     .actions { display: flex; gap: 5px; }
-     .btn-sm { padding: 6px 12px; font-size: 13px; }
-     .btn-icon { width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center; }
-     .toast { position: fixed; bottom: 20px; left: 20px; background: #333; color: white; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: none; z-index: 9999; }
-     .toast.success { background: #198754; }
-     .toast.error { background: #dc3545; }
-        #loadingOverlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10000; align-items: center; justify-content: center; }
-        #loadingOverlay.box { background: white; padding: 30px; border-radius: 12px; text-align: center; }
-        #loadingOverlay.spinner { border: 4px solid #f3f3f3; border-top: 4px solid #0d6efd; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        #imageInput { display: none; }
-
-        /* نافذة التأكيد */
-     .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10001; align-items: center; justify-content: center; }
-     .modal-content { background: white; border-radius: 12px; padding: 25px; max-width: 700px; width: 90%; max-height: 90vh; overflow-y: auto; }
-     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-     .modal-header h3 { font-size: 20px; }
-     .close-btn { font-size: 28px; cursor: pointer; color: #999; }
-     .close-btn:hover { color: #333; }
-     .image-preview { width: 100%; max-height: 300px; object-fit: contain; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; }
-     .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-
-        @media (max-width: 768px) {.grid-2 { grid-template-columns: 1fr; }.stats-grid { grid-template-columns: 1fr 1fr; } }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; margin: 0; padding: 20px; }
+        .navbar { background: #0d6efd; color: white; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .card { background: white; padding: 20px; border-radius: 12px; margin-top: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 25px; border-radius: 12px; width: 400px; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="left">
-            <button class="btn btn-light" onclick="syncData()"><i class="fa-solid fa-rotate"></i> مزامنة</button>
-            <button class="btn btn-light" onclick="showToast('التخزين السحابي مفعل ✅','success')"><i class="fa-solid fa-cloud"></i> Firebase السحابي</button>
-        </div>
-        <h1>🏥 صيدلية العابد <small style="font-size:14px; opacity:0.8">نظام إدارة العملاء والديون</small></h1>
+
+<div class="navbar">
+    <h2>صيدلية العابد</h2>
+    <div>
+        <button class="btn" onclick="exportData()">تصدير JSON</button>
+        <button class="btn" onclick="uploadToCloud()">رفع للسحابة</button>
+        <button class="btn" onclick="downloadFromCloud()">تنزيل من السحابة</button>
     </div>
+</div>
 
-    <div class="container">
-        <div class="stats-grid">
-            <div class="stat-card">
-                <i class="fa-solid fa-money-bill-wave icon"></i>
-                <div class="label">إجمالي الديون</div>
-                <div class="value red" id="totalDebt">0 ر.ي</div>
-            </div>
-            <div class="stat-card">
-                <i class="fa-solid fa-users icon"></i>
-                <div class="label">عدد العملاء</div>
-                <div class="value" id="customerCount">0</div>
-            </div>
-            <div class="stat-card">
-                <i class="fa-solid fa-hand-holding-dollar icon"></i>
-                <div class="label">التحصيل اليومي</div>
-                <div class="value green" id="todayCollection">0 ر.ي</div>
-            </div>
-            <div class="stat-card">
-                <i class="fa-solid fa-chart-line icon"></i>
-                <div class="label">الحركة اليومية</div>
-                <div class="value orange" id="todayMovements">0</div>
-            </div>
-        </div>
+<div class="card">
+    <input type="file" id="imageInput" accept="image/*">
+    <p>أو الصق الصورة هنا مباشرة باستخدام Ctrl+V</p>
+</div>
 
-        <!-- منطقة لصق الصورة + حقل رقم العميل -->
-        <div class="upload-zone" id="dropZone" onclick="document.getElementById('imageInput').click()">
-            <input type="file" id="imageInput" accept="image/*">
-            <i class="fa-solid fa-cloud-arrow-up"></i>
-            <h2>الصق صورة الفاتورة أو السند هنا</h2>
-            <p>اضغط <kbd>PrtSc</kbd> من ODAX ثم <kbd>Ctrl + V</kbd> في أي مكان</p>
-
-            <div style="margin-top:20px; max-width:300px; margin-left:auto; margin-right:auto;">
-                <label style="display:block; margin-bottom:8px; font-weight:600;">رقم العميل (اختياري - لو OCR فشل)</label>
-                <input type="number" id="preCustomerId" placeholder="اكتب رقم العميل قبل اللصق" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; text-align:center; font-size:16px;">
-            </div>
-        </div>
-
-        <!-- إضافة عميل جديد -->
-        <div class="manual-entry">
-            <h3><i class="fa-solid fa-user-plus"></i> إضافة عميل جديد</h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>رقم العميل *</label>
-                    <input type="number" id="newCustomerId" placeholder="مثال: 6">
-                </div>
-                <div class="form-group">
-                    <label>اسم العميل *</label>
-                    <input type="text" id="newCustomerName" placeholder="مثال: عبدالله المروسي">
-                </div>
-                <div class="form-group">
-                    <label>رقم الهاتف *</label>
-                    <input type="tel" id="newCustomerPhone" placeholder="770123456">
-                </div>
-                <div class="form-group">
-                    <label>الرصيد الافتتاحي</label>
-                    <input type="number" id="newCustomerDebt" placeholder="0" value="0">
-                </div>
-            </div>
-            <button class="btn btn-success" onclick="addNewCustomer()"><i class="fa-solid fa-save"></i> حفظ العميل في Firebase</button>
-        </div>
-
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="بحث سريع: رقم العميل, اسم العميل, رقم الهاتف..." onkeyup="filterTable()">
-        </div>
-
-        <div class="grid-2">
-            <div class="card">
-                <h3>العملاء والحركة اليومية</h3>
-                <div class="table-wrap">
-                    <table id="customerTable">
-                        <thead>
-                            <tr>
-                                <th>رقم العميل</th>
-                                <th>العميل</th>
-                                <th>الهاتف</th>
-                                <th>الدين</th>
-                                <th>إجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="customerTableBody">
-                            <tr><td colspan="5" style="text-align:center; padding:30px; color:#999">جاري تحميل البيانات...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>إحصائيات الأسبوع</h3>
-                <canvas id="weekChart"></canvas>
-            </div>
-        </div>
+<div class="modal" id="confirmModal">
+    <div class="modal-content">
+        <h3>مراجعة وتأكيد البيانات</h3>
+        <input type="number" id="confirmCustomerId" placeholder="رقم العميل">
+        <input type="number" id="confirmAmount" placeholder="المبلغ">
+        <select id="confirmType">
+            <option value="taqyid">فاتورة (تقييد)</option>
+            <option value="sadad">سند قبض (سداد)</option>
+        </select>
+        <button class="btn" style="background:green; color:white; width:100%" onclick="confirmAndSave()">حفظ وتحديث</button>
     </div>
-
-    <!-- نافذة التأكيد بعد اللصق -->
-    <div class="modal" id="confirmModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>تأكيد البيانات قبل الإرسال</h3>
-                <span class="close-btn" onclick="closeModal()">&times;</span>
-            </div>
-            <img id="previewImage" class="image-preview" src="" alt="معاينة الصورة">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>رقم العميل *</label>
-                    <input type="number" id="confirmCustomerId" placeholder="أدخل رقم العميل لو لم يظهر">
-                </div>
-                <div class="form-group">
-                    <label>اسم العميل</label>
-                    <input type="text" id="confirmCustomerName" readonly>
-                </div>
-                <div class="form-group">
-                    <label>نوع الحركة</label>
-                    <select id="confirmType">
-                        <option value="taqyid">فاتورة آجلة - تقييد دين</option>
-                        <option value="sadad">سند قبض - سداد</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>المبلغ</label>
-                    <input type="number" id="confirmAmount" placeholder="المبلغ">
-                </div>
-                <div class="form-group">
-                    <label>الرصيد الحالي</label>
-                    <input type="number" id="confirmBalance" placeholder="الرصيد">
-                </div>
-                <div class="form-group">
-                    <label>طريقة الإرسال</label>
-                    <select id="confirmSendType">
-                        <option value="sms">SMS</option>
-                        <option value="whatsapp">واتساب</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-danger" onclick="closeModal()">إلغاء</button>
-                <button class="btn btn-success" onclick="confirmAndSend()"><i class="fa-solid fa-paper-plane"></i> تأكيد وإرسال + تحديث الرصيد</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="loadingOverlay">
-        <div class="box">
-            <div class="spinner"></div>
-            <h3>جاري معالجة الصورة...</h3>
-            <p id="loadingText">قراءة النص من الصورة</p>
-        </div>
-    </div>
-
-    <div class="toast" id="toast"></div>
+</div>
 
 <script>
-const FIREBASE_URL = 'https://alabeed-pharmacy-default-rtdb.firebaseio.com';
-let allCustomers = [];
-let chart = null;
-let currentImageBlob = null;
+    const FIREBASE_URL = 'https://alabeed-pharmacy-default-rtdb.firebaseio.com';
+    let allCustomers = JSON.parse(localStorage.getItem('pharmacy_data')) || [];
 
-document.addEventListener('DOMContentLoaded', () => {
-    initChart();
-    syncData();
-});
-
-document.addEventListener('paste', async (e) => {
-    const items = e.clipboardData.items;
-    for (let item of items) {
-        if (item.type.indexOf('image')!== -1) {
-            const blob = item.getAsFile();
-            await processImage(blob);
-        }
-    }
-});
-
-const dropZone = document.getElementById('dropZone');
-dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
-dropZone.addEventListener('drop', async (e) => {
-    e.preventDefault();
-    dropZone.classList.remove('drag');
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) await processImage(file);
-});
-
-document.getElementById('imageInput').addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (file) await processImage(file);
-});
-
-async function processImage(blob) {
-    currentImageBlob = blob;
-    showLoading('قراءة النص من الصورة');
-    try {
+    // استخراج النصوص من الصورة
+    async function processImage(blob) {
         const { data: { text } } = await Tesseract.recognize(blob, 'ara');
-        console.log('OCR Text:', text);
-        showLoading('تحليل البيانات...');
+        const cleanNum = (str) => parseFloat(str.replace(/[^0-9.]/g, '')) || 0;
 
-        let movementType = 'taqyid';
-        let amount = '0';
-        let balance = '0';
-        let customerId = parseInt(document.getElementById('preCustomerId').value) || 0;
-        let customerName = '';
+        let type = text.includes('سند قبض') ? 'sadad' : 'taqyid';
+        let amount = cleanNum(text.match(/[\d,.]+/)?.[0] || "0");
+        let id = parseInt(text.match(/\d{3,}/)?.[0] || "0");
 
-        // 1. سند قبض
-        if (text.includes('سند قبض')) {
-            movementType = 'sadad';
-            const match = text.match(/المبلغ\s*([\d,]+\.?\d*)/);
-            amount = match? match[1].replace(/,/g, '') : '0';
-            if (!customerId) {
-                const idMatch = text.match(/رقم تحليلي\s*(\d+)/);
-                customerId = idMatch? parseInt(idMatch[1]) : 0;
-            }
-            const nameMatch = text.match(/اسم الحساب\s*:\s*(.+)/);
-            customerName = nameMatch? nameMatch[1].trim() : '';
-
-        // 2. فاتورة آجلة - نسخة الطباعة
-        } else if (text.includes('فاتورة مبيعات') || text.includes('نوع الفاتورة: آجلة')) {
-            movementType = 'taqyid';
-            const amountMatch = text.match(/صافي الفاتورة\s*:\s*([\d,]+\.?\d*)/);
-            const balanceMatch = text.match(/الرصيد الحالي\s*:\s*([\d,]+\.?\d*)/);
-            amount = amountMatch? amountMatch[1].replace(/,/g, '') : '0';
-            balance = balanceMatch? balanceMatch[1].replace(/,/g, '') : '0';
-            if (!customerId) {
-                const idMatch = text.match(/المطلوب من الأخ\s*\/\s*.*?(\d+)/) || text.match(/المطلوب من الأخ.*?(\d+)/);
-                customerId = idMatch? parseInt(idMatch[1]) : 0;
-            }
-            const nameMatch = text.match(/المطلوب من الأخ\s*\/\s*(.+?)\s+\d+/);
-            customerName = nameMatch? nameMatch[1].trim() : '';
-
-        // 3. فاتورة آجلة - شاشة ODAX
-        } else if (text.includes('فاتورة الصيدليات') || text.includes('Oracle Forms')) {
-            movementType = 'taqyid';
-            const amountMatch = text.match(/صافي الفاتورة\s*([\d,]+\.?\d*)/);
-            amount = amountMatch? amountMatch[1].replace(/,/g, '') : '0';
-            if (!customerId) {
-                const idMatch = text.match(/العميل\s*:?\s*.+?\s+(\d+)/);
-                customerId = idMatch? parseInt(idMatch[1]) : 0;
-            }
-            const nameMatch = text.match(/العميل\s*:?\s*(.+?)\s+\d+/);
-            customerName = nameMatch? nameMatch[1].trim() : '';
-        }
-
-        hideLoading();
-        showConfirmModal(blob, customerId, customerName, movementType, amount, balance);
-
-    } catch (err) {
-        showToast(`خطأ: ${err.message}`, 'error');
-        hideLoading();
-    }
-}
-
-function showConfirmModal(blob, customerId, customerName, type, amount, balance) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        document.getElementById('previewImage').src = e.target.result;
-    };
-    reader.readAsDataURL(blob);
-
-    document.getElementById('confirmCustomerId').value = customerId || '';
-    document.getElementById('confirmCustomerName').value = customerName || '';
-    document.getElementById('confirmType').value = type;
-    document.getElementById('confirmAmount').value = amount || '';
-    document.getElementById('confirmBalance').value = balance || '';
-
-    if (customerId) {
-        const customer = allCustomers.find(c => c.id === customerId);
-        if (customer) {
-            document.getElementById('confirmCustomerName').value = customer.name;
-        }
+        document.getElementById('confirmCustomerId').value = id;
+        document.getElementById('confirmAmount').value = amount;
+        document.getElementById('confirmType').value = type;
+        document.getElementById('confirmModal').style.display = 'flex';
     }
 
-    document.getElementById('confirmCustomerId').oninput = function() {
-        const id = parseInt(this.value);
-        const customer = allCustomers.find(c => c.id === id);
-        document.getElementById('confirmCustomerName').value = customer? customer.name : 'غير موجود';
-    };
-
-    document.getElementById('confirmModal').style.display = 'flex';
-}
-
-function closeModal() {
-    document.getElementById('confirmModal').style.display = 'none';
-    document.getElementById('preCustomerId').value = '';
-    currentImageBlob = null;
-}
-
-async function confirmAndSend() {
-    const customerId = parseInt(document.getElementById('confirmCustomerId').value);
-    const type = document.getElementById('confirmType').value;
-    const amount = parseFloat(document.getElementById('confirmAmount').value);
-    const sendType = document.getElementById('confirmSendType').value;
-    const balanceFromImage = parseFloat(document.getElementById('confirmBalance').value);
-
-    if (!customerId ||!amount) {
-        showToast('أدخل رقم العميل والمبلغ', 'error');
-        return;
-    }
-
-    const customer = allCustomers.find(c => c.id === customerId);
-    if (!customer) {
-        showToast(`العميل ${customerId} غير موجود في Firebase. أضفه أولاً من قسم "إضافة عميل جديد"`, 'error');
-        return;
-    }
-
-    showLoading('تحديث الرصيد وإرسال الرسالة...');
-
-    try {
-        let newBalance = customer.totalDebt || 0;
-        if (type === 'taqyid') {
-            newBalance += amount;
-        } else if (type === 'sadad') {
-            newBalance -= amount;
-        }
-        if (balanceFromImage > 0) {
-            newBalance = balanceFromImage;
-        }
-
-        await fetch(`${FIREBASE_URL}/customers/${customerId}.json`, {
-            method: 'PATCH',
-            body: JSON.stringify({ totalDebt: newBalance })
-        });
-
-        const msg = getMessageText(type, sendType, customer.name, amount, newBalance);
-
-        if (sendType === 'sms') {
-            window.location.href = `sms:${customer.phone}?body=${encodeURIComponent(msg)}`;
+    // حفظ البيانات محلياً وعبر السحابة
+    function confirmAndSave() {
+        const id = parseInt(document.getElementById('confirmCustomerId').value);
+        const amount = parseFloat(document.getElementById('confirmAmount').value);
+        const type = document.getElementById('confirmType').value;
+        
+        // تحديث محلي
+        let customer = allCustomers.find(c => c.id === id);
+        if(customer) {
+            customer.totalDebt = (type === 'taqyid') ? customer.totalDebt + amount : customer.totalDebt - amount;
         } else {
-            const phone = customer.phone.replace(/^0/, '967');
-            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+            allCustomers.push({ id, totalDebt: amount });
         }
-
-        showToast(`تم إرسال وتحديث رصيد ${customer.name} إلى ${newBalance.toLocaleString('ar-YE')} ر.ي ✅`, 'success');
-        closeModal();
-        syncData();
-
-    } catch (err) {
-        showToast(`خطأ: ${err.message}`, 'error');
-    } finally {
-        hideLoading();
-    }
-}
-
-// إضافة عميل جديد
-async function addNewCustomer() {
-    const id = parseInt(document.getElementById('newCustomerId').value);
-    const name = document.getElementById('newCustomerName').value.trim();
-    const phone = document.getElementById('newCustomerPhone').value.trim();
-    const debt = parseFloat(document.getElementById('newCustomerDebt').value) || 0;
-
-    if (!id ||!name ||!phone) {
-        showToast('أدخل رقم العميل والاسم والهاتف', 'error');
-        return;
+        
+        localStorage.setItem('pharmacy_data', JSON.stringify(allCustomers));
+        document.getElementById('confirmModal').style.display = 'none';
+        alert("تم الحفظ بنجاح!");
     }
 
-    if (allCustomers.find(c => c.id === id)) {
-        showToast(`العميل ${id} موجود مسبقاً`, 'error');
-        return;
+    // الدوال السحابية
+    async function uploadToCloud() {
+        await fetch(`${FIREBASE_URL}/customers.json`, { method: 'PUT', body: JSON.stringify(allCustomers) });
+        alert("تم الرفع للسحابة");
     }
 
-    showLoading('حفظ العميل الجديد...');
-
-    try {
-        const newCustomer = {
-            id: id,
-            name: name,
-            phone: phone,
-            totalDebt: debt
-        };
-
-        await fetch(`${FIREBASE_URL}/customers/${id}.json`, {
-            method: 'PUT',
-            body: JSON.stringify(newCustomer)
-        });
-
-        showToast(`تم إضافة العميل ${name} بنجاح ✅`, 'success');
-
-        // تفريغ الحقول
-        document.getElementById('newCustomerId').value = '';
-        document.getElementById('newCustomerName').value = '';
-        document.getElementById('newCustomerPhone').value = '';
-        document.getElementById('newCustomerDebt').value = '0';
-
-        syncData();
-
-    } catch (err) {
-        showToast(`خطأ: ${err.message}`, 'error');
-    } finally {
-        hideLoading();
-    }
-}
-
-function getMessageText(type, channel, name, amount, totalDebt) {
-    const isWhatsApp = channel === 'whatsapp';
-    const signature = isWhatsApp? `\n\n🏥 صيدلية العابد\nتعز - الحوبان - مدخل البريد\n📞 770066128` : '';
-    const messages = {
-        taqyid: `الاخ ${name}، نود اعلامكم بان تم تقيد مبلغ ${amount}ريال (فاتورة جديدة) ليصبح اجمالي الرصيد عليكم ${totalDebt} ريال.${isWhatsApp? '\n' : ' '}\nيرجى السداد بداية ونهاية كل شهر${signature}`,
-        sadad: `الاخ ${name}، وتم استلام مبلغ ${amount} ريال (سداد) ليصبح اجمالي الرصيد عليكم ${totalDebt} ريال.${isWhatsApp? '\n' : ' '}\nيرجى السداد بداية ونهاية كل شهر${signature}`
-    };
-    return messages[type];
-}
-
-async function syncData() {
-    showToast('جاري المزامنة...', '');
-    try {
+    async function downloadFromCloud() {
         const res = await fetch(`${FIREBASE_URL}/customers.json`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        allCustomers = data? Object.values(data) : [];
-        updateStats();
-        updateTable();
-        showToast('تم التحديث بنجاح ✅', 'success');
-    } catch (err) {
-        console.error('Sync Error:', err);
-        showToast(`فشل المزامنة: ${err.message}`, 'error');
+        allCustomers = await res.json();
+        localStorage.setItem('pharmacy_data', JSON.stringify(allCustomers));
+        alert("تم التنزيل من السحابة");
     }
-}
 
-function updateStats() {
-    const totalDebt = allCustomers.reduce((sum, c) => sum + (c.totalDebt || 0), 0);
-    document.getElementById('totalDebt').textContent = totalDebt.toLocaleString('ar-YE') + ' ر.ي';
-    document.getElementById('customerCount').textContent = allCustomers.length;
-}
-
-function updateTable() {
-    const tbody = document.getElementById('customerTableBody');
-    if (allCustomers.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:30px; color:#999">لا يوجد عملاء</td></tr>';
-        return;
-    }
-    tbody.innerHTML = allCustomers.map(c => `
-        <tr>
-            <td><strong>${c.id}</strong></td>
-            <td><strong>${c.name}</strong></td>
-            <td>${c.phone}</td>
-            <td><span class="badge ${c.totalDebt > 0? 'badge-red' : 'badge-green'}">${(c.totalDebt || 0).toLocaleString('ar-YE')} ر.ي</span></td>
-            <td class="actions">
-                <button class="btn btn-primary btn-sm btn-icon" onclick="sendSMS(${c.id})" title="SMS"><i class="fa-solid fa-comment-sms"></i></button>
-                <button class="btn btn-success btn-sm btn-icon" onclick="sendWhatsApp(${c.id})" title="واتساب"><i class="fa-brands fa-whatsapp"></i></button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-function filterTable() {
-    const search = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = allCustomers.filter(c =>
-        c.name.toLowerCase().includes(search) ||
-        c.phone.includes(search) ||
-        c.id.toString().includes(search)
-    );
-    const tbody = document.getElementById('customerTableBody');
-    tbody.innerHTML = filtered.map(c => `
-        <tr>
-            <td><strong>${c.id}</strong></td>
-            <td><strong>${c.name}</strong></td>
-            <td>${c.phone}</td>
-            <td><span class="badge ${c.totalDebt > 0? 'badge-red' : 'badge-green'}">${(c.totalDebt || 0).toLocaleString('ar-YE')} ر.ي</span></td>
-            <td class="actions">
-                <button class="btn btn-primary btn-sm btn-icon" onclick="sendSMS(${c.id})"><i class="fa-solid fa-comment-sms"></i></button>
-                <button class="btn btn-success btn-sm btn-icon" onclick="sendWhatsApp(${c.id})"><i class="fa-brands fa-whatsapp"></i></button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-function sendSMS(customerId) {
-    const c = allCustomers.find(x => x.id === customerId);
-    const msg = `سلام الله عليكم يا ${c.name}، لو سمحت ممكن تسديد الحساب نهاية شهر وبداية الشهر، الصيدلية صيدليتك بأي وقت.\nحسابك: ${c.totalDebt || 0} ريال`;
-    window.location.href = `sms:${c.phone}?body=${encodeURIComponent(msg)}`;
-}
-
-function sendWhatsApp(customerId) {
-    const c = allCustomers.find(x => x.id === customerId);
-    const msg = `سلام الله عليكم يا ${c.name}، لو سمحت ممكن تسديد الحساب نهاية شهر وبداية الشهر، الصيدلية صيدليتك بأي وقت.\nحسابك: ${c.totalDebt || 0} ريال\nصيدلية العابد`;
-    const phone = c.phone.replace(/^0/, '967');
-    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
-}
-
-function initChart() {
-    const ctx = document.getElementById('weekChart').getContext('2d');
-    chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
-            datasets: [{
-                label: 'التحصيل',
-                data: [6500, 7200, 8100, 7800, 9000, 8500, 8250],
-                borderColor: '#0d6efd',
-                backgroundColor: 'rgba(13, 110, 253, 0.1)',
-                tension: 0.4,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
-        }
+    // دعم اللصق المباشر
+    document.addEventListener('paste', (e) => {
+        const file = e.clipboardData.items[0].getAsFile();
+        if(file) processImage(file);
     });
-}
-
-function showLoading(text) {
-    document.getElementById('loadingText').textContent = text;
-    document.getElementById('loadingOverlay').style.display = 'flex';
-}
-
-function hideLoading() {
-    document.getElementById('loadingOverlay').style.display = 'none';
-}
-
-function showToast(msg, type) {
-    const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.className = `toast ${type}`;
-    toast.style.display = 'block';
-    setTimeout(() => { toast.style.display = 'none'; }, 3000);
-}
 </script>
 </body>
 </html>
